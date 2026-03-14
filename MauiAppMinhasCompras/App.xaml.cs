@@ -5,7 +5,11 @@ namespace MauiAppMinhasCompras
     //Agenda 03
     public partial class App : Application
     {
-        //Campo: onde o dado está gravado. Aqui: campo implicitamente privado. Underline indica campo.
+        /*É como “avisar” o app que trabalhará com SQLite, 
+         * tornando a classe sqlitedatabasehelper disponível em todo o aplicativo.
+         * Campo: onde o dado está gravado. Aqui: campo implicitamente privado. Underline indica campo.
+         */
+        
         static SQLiteDatabaseHelper _db;
 
         //Propriedade: forma de acesso ao campo.
@@ -15,8 +19,9 @@ namespace MauiAppMinhasCompras
             {
                 if (_db == null)
                 {
-                    //Busca do caminho onde está o arquivo de banco de dados, pois cada plataforma
-                    //armazena em um caminho diferente.
+                    /*Busca do caminho onde está o arquivo de banco de dados, pois cada plataforma
+                     * armazena em um caminho diferente.
+                     */
                     string path = Path.Combine(
                         Environment.GetFolderPath(
                             Environment.SpecialFolder.LocalApplicationData),
