@@ -9,6 +9,24 @@ public partial class EditarProduto : ContentPage
 		InitializeComponent();
 	}
 
+    /* ChatGPT
+     * Código inserido devido crash ao deletar valor ou tentar inserir negativo nos campos 
+     * Quantidade ou Preco. Com Binding no Entry, double dava erro.
+     * Preenche os campos da tela com os dados do produto quando a página aparece
+     * (abre ou volta da navegação - PopAsync)*/
+    
+    protected override void OnAppearing()
+    {
+        base.OnAppearing(); //Executa o comportamento padrão da classe ContentPage, garante funcionamento do Maui
+
+        if (BindingContext is Produto p) //Se BindingContext é um Produto, ele faz o cast automaticamente e cria a variável p
+        {
+            txt_descricao.Text = p.Descricao;
+            txt_quantidade.Text = p.Quantidade.ToString(); //Converte double para string
+            txt_preco.Text = p.Preco.ToString(); //Converte double para string
+        }
+    }
+    
     private async void ToolbarItem_Clicked(object sender, EventArgs e)
     {
         try
