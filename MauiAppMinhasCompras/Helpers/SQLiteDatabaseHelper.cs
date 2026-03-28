@@ -3,6 +3,7 @@ using SQLite;
 
 namespace MauiAppMinhasCompras.Helpers
 {
+    //Agenda 02
     public class SQLiteDatabaseHelper
     {
         readonly SQLiteAsyncConnection _conn; //propriedade que armazena a "conexão"
@@ -13,18 +14,16 @@ namespace MauiAppMinhasCompras.Helpers
             _conn.CreateTableAsync<Produto>().Wait();
         }
 
-        public Task<int> Insert(Produto p) //Declaração de um método p = parâmetro do tipo produto = classe. Só consegue fazer insert a partir de um model produto preenchido.
+        public Task<int> Insert(Produto p) //Declaração de um método: p = parâmetro do tipo produto = classe (model). Só consegue fazer insert a partir de um model produto preenchido.
         {
             return _conn.InsertAsync(p);
         }
 
         public Task<List<Produto>> Update(Produto p)
         {
-            string sql = "UPDATE Produto SET Descricao=?, Quantidade=?, Preco=? WHERE Id=?"; //Emula SQL; poderia fazer como o Insert acima.
+            string sql = "UPDATE Produto SET Descricao=?, Quantidade=?, Preco=?, Categoria=? WHERE Id=?"; //Emula SQL; poderia fazer como o Insert acima.
 
-            return _conn.QueryAsync<Produto>(
-                sql, p.Descricao, p.Quantidade, p.Preco, p.Id
-            );
+            return _conn.QueryAsync<Produto>(sql, p.Descricao, p.Quantidade, p.Preco, p.Categoria, p.Id);
         }
 
         public Task<int> Delete(int id) //Para deletar basta passar a ID, não precisa passar o objeto todo.
@@ -42,6 +41,13 @@ namespace MauiAppMinhasCompras.Helpers
             string sql = "SELECT * FROM Produto WHERE descricao LIKE '%" + q + "%'";
 
             return _conn.QueryAsync<Produto>(sql);
+        }
+        //Agenda 06. ChatGPT: o LIKE precisa dos % dentro do valor do parâmetro, não na query diretamente.
+        public Task<List<Produto>> SelectCategoria(string q)
+        {
+            string sql = "SELECT * FROM Produto WHERE categoria LIKE ?";
+
+            return _conn.QueryAsync<Produto>(sql, "%" + q + "%");
         }
     }
 }

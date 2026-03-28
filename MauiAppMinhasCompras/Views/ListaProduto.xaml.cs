@@ -17,15 +17,35 @@ public partial class ListaProduto : ContentPage
 		lst_produtos.ItemsSource = lista;
 	}
 
+    private string categoria_selecionada = "";
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        categoria_selecionada = txt_categoria.Text;
+        OnAppearing(); // ChatGPT: Força atualizar a lista
+    }
+
+    //Mecanismo paralelo ao construtor, é chamado sempre que a tela aparece.
     protected async override void OnAppearing()
     {
         try
         {
-            lista.Clear();
-            
-            List<Produto> tmp = await App.Db.GetAll();
+            lista.Clear(); //Limpa a lista para reiniciar.
 
-            tmp.ForEach(i => lista.Add(i));
+            if(string.IsNullOrWhiteSpace(categoria_selecionada))
+            {
+                List<Produto> tmp = await App.Db.GetAll(); //Busca lista de produtos.
+
+                tmp.ForEach(i => lista.Add(i)); //Abastece ObservableCollection.
+            }
+            else
+            {
+                List<Produto> tmp = await App.Db.SelectCategoria(categoria_selecionada); //Busca lista de produtos.
+
+                tmp.ForEach(i => lista.Add(i)); //Abastece ObservableCollection.
+            }
+
+            
         }
         catch (Exception ex)
         {
@@ -54,6 +74,8 @@ public partial class ListaProduto : ContentPage
         {
             string q = e.NewTextValue;
 
+            lst_produtos.IsRefreshing = true;
+
             lista.Clear();
 
             /*List<Produto> tmp = await App.Db.Search(q);
@@ -75,12 +97,16 @@ public partial class ListaProduto : ContentPage
                 lbl_sem_resultado.IsVisible = true;
             else
                 lbl_sem_resultado.IsVisible = false;
-            lst_produtos.IsVisible = tmp.Count > 0;
-            lbl_sem_resultado.IsVisible = tmp.Count == 0;
+                lst_produtos.IsVisible = tmp.Count > 0;
+                lbl_sem_resultado.IsVisible = tmp.Count == 0;
         }
         catch (Exception ex)
         {
             await DisplayAlert("Ops", ex.Message, "OK");
+        }
+        finally //Executado se cair ou não no catch
+        {
+            lst_produtos.IsRefreshing = false;
         }
     }
 
@@ -138,4 +164,26 @@ public partial class ListaProduto : ContentPage
             DisplayAlert("Ops", ex.Message, "OK");
         }
     }
+
+    //Agenda 06
+    private async void lst_produtos_Refreshing(object sender, EventArgs e)
+    {
+        try
+        {
+            lista.Clear(); //Limpa a lista para reiniciar.
+
+            List<Produto> tmp = await App.Db.GetAll(); //Busca lista de produtos.
+
+            tmp.ForEach(i => lista.Add(i)); //Abastece ObservableCollection.
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ops", ex.Message, "OK");
+        }
+        finally //Executado se cair ou não no catch
+        {
+            lst_produtos.IsRefreshing = false;
+        }
+    }
+
 }

@@ -24,6 +24,7 @@ public partial class EditarProduto : ContentPage
             txt_descricao.Text = p.Descricao;
             txt_quantidade.Text = p.Quantidade.ToString(); //Converte double para string
             txt_preco.Text = p.Preco.ToString(); //Converte double para string
+            txt_categoria.Text = p.Categoria;
         }
     }
     
@@ -39,7 +40,8 @@ public partial class EditarProduto : ContentPage
                 Id = produto_anexado.Id,
                 Descricao = txt_descricao.Text,
                 Quantidade = Convert.ToDouble(txt_quantidade.Text),
-                Preco = Convert.ToDouble(txt_preco.Text)
+                Preco = Convert.ToDouble(txt_preco.Text),
+                Categoria = txt_categoria.Text
             };
 
             //A partir do Db temos acesso aos métodos implementados na SQLiteDataBaseHelper

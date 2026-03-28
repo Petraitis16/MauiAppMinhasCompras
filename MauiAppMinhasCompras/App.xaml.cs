@@ -1,4 +1,5 @@
 ﻿using MauiAppMinhasCompras.Helpers;
+using System.Globalization;
 
 namespace MauiAppMinhasCompras
 {
@@ -9,7 +10,6 @@ namespace MauiAppMinhasCompras
          * tornando a classe sqlitedatabasehelper disponível em todo o aplicativo.
          * Campo: onde o dado está gravado. Aqui: campo implicitamente privado. Underline indica campo.
          */
-        
         static SQLiteDatabaseHelper _db;
 
         //Propriedade: forma de acesso ao campo.
@@ -38,8 +38,11 @@ namespace MauiAppMinhasCompras
         {
             InitializeComponent();
 
+            //Agenda 06
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
+
             //MainPage = new AppShell();
-            //Agenda 02
+            //Agenda 01: nova página abre nova ListaProduto
             MainPage = new NavigationPage(new Views.ListaProduto());
         }
     }
