@@ -19,6 +19,7 @@ public partial class ListaProduto : ContentPage
 
     private string categoria_selecionada = "";
 
+    //Agenda 06 - Busca por categoria
     private void Button_Clicked(object sender, EventArgs e)
     {
         categoria_selecionada = txt_categoria.Text;
@@ -38,7 +39,7 @@ public partial class ListaProduto : ContentPage
 
                 tmp.ForEach(i => lista.Add(i)); //Abastece ObservableCollection.
             }
-            else
+            else //Agenda 06 - Busca por categoria
             {
                 List<Produto> tmp = await App.Db.SelectCategoria(categoria_selecionada); //Busca lista de produtos.
 
